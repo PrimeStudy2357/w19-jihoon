@@ -19,6 +19,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 세션 관련 설정
+const session = require('express-session');
+app.use(
+  session({
+    resave: false, // 세션을 언제나 저장할지 설정
+    saveUninitialized: true, // 세션에 저장할 내역이 없더라도 처음부터 세션을 생성할지 설정
+    secret: 'my-secret', // 암호화용 키 (실습 환경이므로 평문 저장)
+    cookie: {
+      httpOnly: false,
+      secure: false,
+    },
+    name: 'session-cookie',
+  }),
+);
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
